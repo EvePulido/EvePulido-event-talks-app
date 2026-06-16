@@ -90,6 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     copyBtn.addEventListener('click', copyTweetText);
     postTweetBtn.addEventListener('click', postToX);
+
+    const exportCsvBtn = document.getElementById('export-csv-btn');
+    if (exportCsvBtn) {
+        exportCsvBtn.addEventListener('click', exportToCSV);
+    }
 });
 
 // Polyfill helper for stripping whitespace
@@ -199,6 +204,12 @@ function renderReleases() {
                     <span class="card-date">${item.date}</span>
                 </div>
                 <div class="card-actions">
+                    <button class="btn-card-action btn-copy-card" title="Copy to clipboard" aria-label="Copy update to clipboard">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                    </button>
                     <button class="btn-tweet" aria-label="Tweet about this update">
                         <svg viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -215,6 +226,10 @@ function renderReleases() {
         // Event listener for Share button
         const shareBtn = card.querySelector('.btn-tweet');
         shareBtn.addEventListener('click', () => openTweetModal(item));
+
+        // Event listener for Copy Card button
+        const copyCardBtn = card.querySelector('.btn-copy-card');
+        copyCardBtn.addEventListener('click', () => copyCardText(item));
 
         releasesContainer.appendChild(card);
     });
@@ -374,4 +389,71 @@ function showToast(message) {
     toastTimeout = setTimeout(() => {
         toast.classList.add('hidden');
     }, 3000);
+}
+
+/* ==========================================================================
+   UTILITY FUNCTIONS (COPY CARD & EXPORT CSV)
+   ========================================================================== */
+function copyCardText(item) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = item.content;
+    const plainText = (tempDiv.textContent || tempDiv.innerText || '').replace(/\s+/g, ' ').trim();
+    const textToCopy = `Google BigQuery Update [${item.date}] (${item.type}):\n${plainText}\n\nDetails: ${item.link}`;
+    
+    navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+            showToast("Copied to clipboard!");
+        })
+        .catch(err => {
+            console.error('Failed to copy card text: ', err);
+            showToast("Failed to copy update.");
+        });
+}
+
+function exportToCSV() {
+    const filtered = allReleases.filter(item => {
+        const textContent = (item.type + ' ' + item.date + ' ' + item.content).toLowerCase();
+        const matchesSearch = textContent.includes(activeFilters.search);
+        const matchesCategory = activeFilters.category === 'all' || 
+                                item.type.toLowerCase() === activeFilters.category;
+        return matchesSearch && matchesCategory;
+    });
+
+    if (filtered.length === 0) {
+        showToast("No data available to export.");
+        return;
+    }
+
+    const headers = ["Date", "Type", "Link", "Content"];
+    const csvRows = [headers.map(h => `"${h}"`).join(",")];
+
+    filtered.forEach(item => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = item.content;
+        const plainTextContent = (tempDiv.textContent || tempDiv.innerText || '').replace(/\s+/g, ' ').trim();
+        
+        const row = [
+            item.date,
+            item.type,
+            item.link,
+            plainTextContent
+        ];
+        
+        csvRows.push(row.map(val => `"${val.replace(/"/g, '""')}"`).join(","));
+    });
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    const categoryName = activeFilters.category === 'all' ? 'all' : activeFilters.category;
+    link.setAttribute("download", `bigquery_releases_${categoryName}_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    showToast("CSV Exported successfully!");
 }

@@ -517,6 +517,25 @@ body {
     height: 14px;
 }
 
+.btn-card-action {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 6.5px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.btn-card-action:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: var(--text-muted);
+}
+
 /* Card Content styling for parsed HTML */
 .card-content {
     font-size: 15px;
