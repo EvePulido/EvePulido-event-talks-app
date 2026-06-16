@@ -42,6 +42,12 @@ const postTweetBtn = document.getElementById('post-tweet-btn');
 const toast = document.getElementById('toast');
 const toastMessage = document.getElementById('toast-message');
 
+// New UX elements
+const clearSearchBtn = document.getElementById('clear-search-btn');
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+const scrollToTopBtn = document.getElementById('scroll-to-top');
+const tweetWarningMsg = document.getElementById('tweet-warning-msg');
+
 /* ==========================================================================
    INITIALIZATION & EVENT LISTENERS
    ========================================================================== */
@@ -74,6 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners for Filters
     searchInput.addEventListener('input', (e) => {
         activeFilters.search = e.target.value.toLowerCase().strip();
+        if (clearSearchBtn) {
+            if (e.target.value) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+        }
         renderReleases();
     });
 
@@ -116,6 +129,50 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportCsvBtn = document.getElementById('export-csv-btn');
     if (exportCsvBtn) {
         exportCsvBtn.addEventListener('click', exportToCSV);
+    }
+
+    // New UX button event listeners
+    if (clearSearchBtn) {
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            activeFilters.search = '';
+            clearSearchBtn.classList.add('hidden');
+            renderReleases();
+            searchInput.focus();
+        });
+    }
+
+    if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            activeFilters.search = '';
+            if (clearSearchBtn) clearSearchBtn.classList.add('hidden');
+            
+            // Reset active filter badges
+            document.querySelectorAll('.filter-badge').forEach(badge => badge.classList.remove('active'));
+            const allBadge = document.querySelector('.filter-badge[data-filter="all"]');
+            if (allBadge) allBadge.classList.add('active');
+            activeFilters.category = 'all';
+
+            renderReleases();
+        });
+    }
+
+    // Scroll to Top visibility
+    window.addEventListener('scroll', () => {
+        if (scrollToTopBtn) {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.remove('hidden');
+            } else {
+                scrollToTopBtn.classList.add('hidden');
+            }
+        }
+    });
+
+    if (scrollToTopBtn) {
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
     }
 });
 
@@ -260,7 +317,24 @@ function renderReleases() {
 function showLoading(show) {
     if (show) {
         loadingState.classList.remove('hidden');
-        releasesContainer.classList.add('hidden');
+        releasesContainer.classList.remove('hidden');
+        
+        // Render shimmering skeleton cards
+        releasesContainer.innerHTML = Array(3).fill().map(() => `
+            <div class="release-card skeleton-card">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <div class="skeleton-element skeleton-badge"></div>
+                        <div class="skeleton-element skeleton-date"></div>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <div class="skeleton-element skeleton-line line-1"></div>
+                    <div class="skeleton-element skeleton-line line-2"></div>
+                    <div class="skeleton-element skeleton-line line-3"></div>
+                </div>
+            </div>
+        `).join('');
     } else {
         loadingState.classList.add('hidden');
     }
@@ -365,14 +439,18 @@ function updateTweetPreview(text) {
     charCounterContainer.classList.remove('warning', 'danger');
     postTweetBtn.disabled = false;
 
-    if (currentLength >= maxLength) {
+    if (currentLength > maxLength) {
         charCounterContainer.classList.add('danger');
-        // If it goes beyond 280, disable the Twitter button
-        if (currentLength > maxLength) {
-            postTweetBtn.disabled = true;
-        }
+        postTweetBtn.disabled = true;
+        if (tweetWarningMsg) tweetWarningMsg.classList.remove('hidden');
+    } else if (currentLength === maxLength) {
+        charCounterContainer.classList.add('danger');
+        if (tweetWarningMsg) tweetWarningMsg.classList.add('hidden');
     } else if (currentLength >= 260) {
         charCounterContainer.classList.add('warning');
+        if (tweetWarningMsg) tweetWarningMsg.classList.add('hidden');
+    } else {
+        if (tweetWarningMsg) tweetWarningMsg.classList.add('hidden');
     }
 }
 

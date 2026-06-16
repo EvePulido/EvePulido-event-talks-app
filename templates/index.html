@@ -80,6 +80,7 @@
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
                     <input type="text" id="search-input" placeholder="Search updates..." aria-label="Search release notes">
+                    <button id="clear-search-btn" class="clear-search-btn hidden" aria-label="Clear search" title="Clear search">&times;</button>
                 </div>
 
                 <div class="filter-group-title">Filter by Category</div>
@@ -136,6 +137,7 @@
                 <div class="empty-icon">🔍</div>
                 <h2>No results found</h2>
                 <p>Try searching for a different keyword or checking your filters.</p>
+                <button id="clear-filters-btn" class="btn btn-secondary" style="margin-top: 12px;">Clear All Filters</button>
             </div>
 
             <!-- Release Notes Grid/List -->
@@ -176,7 +178,7 @@
                 <!-- Textarea for customization -->
                 <div class="textarea-container">
                     <label for="tweet-textarea">Customize your post:</label>
-                    <textarea id="tweet-textarea" rows="5" maxlength="280"></textarea>
+                    <textarea id="tweet-textarea" rows="5" maxlength="350"></textarea>
                     <div class="textarea-footer">
                         <button class="btn-text" id="reset-tweet-btn">Reset to Default</button>
                         <div class="char-counter">
@@ -186,6 +188,9 @@
                                 <circle class="char-progress-fill" id="progress-circle" cx="10" cy="10" r="8"></circle>
                             </svg>
                         </div>
+                    </div>
+                    <div id="tweet-warning-msg" class="tweet-warning-msg hidden">
+                        ⚠️ Your post exceeds the 280-character limit. Please shorten it.
                     </div>
                 </div>
             </div>
@@ -211,6 +216,13 @@
     <div class="toast hidden" id="toast">
         <span id="toast-message">Notes fetched successfully!</span>
     </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" class="scroll-to-top hidden" aria-label="Scroll to top" title="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
     <!-- Main JS -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
