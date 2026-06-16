@@ -74,7 +74,7 @@
     --badge-note-glow: rgba(139, 92, 246, 0.15);
 }    
     /* Layout */
-    --sidebar-width: 380px;
+    --sidebar-width: 320px;
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 24px;
@@ -133,7 +133,7 @@ body {
     width: var(--sidebar-width);
     background-color: var(--bg-header);
     border-right: 1px solid var(--border-color);
-    padding: 40px 32px;
+    padding: 40px 20px;
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -142,6 +142,7 @@ body {
     left: 0;
     z-index: 10;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Brand Section */
@@ -258,7 +259,7 @@ body {
 .stats-panel {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 40px;
 }
 
@@ -266,7 +267,7 @@ body {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
-    padding: 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1061,7 +1062,7 @@ body {
 /* ==========================================================================
    RESPONSIVE MEDIA QUERIES
    ========================================================================== */
-@media (max-width: 1024px) {
+@media (max-width: 1150px) {
     .app-container {
         flex-direction: column;
     }
@@ -1069,15 +1070,21 @@ body {
     .app-header {
         width: 100%;
         position: relative;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        height: auto;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
-        padding: 30px 24px;
+        padding: 30px 20px;
         overflow-y: visible;
+        overflow-x: hidden;
     }
     
     .feed-main {
         margin-left: 0;
-        padding: 40px 24px;
+        padding: 40px 20px;
+        width: 100%;
     }
     
     .stats-panel {
@@ -1086,6 +1093,14 @@ body {
 }
 
 @media (max-width: 640px) {
+    .app-header {
+        padding: 24px 16px;
+    }
+    
+    .feed-main {
+        padding: 30px 16px;
+    }
+
     .stats-panel {
         grid-template-columns: 1fr;
     }
