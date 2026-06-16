@@ -225,6 +225,34 @@ body {
     background: rgba(0, 0, 0, 0.02);
 }
 
+[data-theme="light"] .stat-card {
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .stat-value {
+    color: #0f172a;
+}
+
+[data-theme="light"] .btn-tweet {
+    background: rgba(29, 155, 240, 0.08);
+    border-color: rgba(29, 155, 240, 0.35);
+    color: #0b70ad;
+}
+
+[data-theme="light"] .btn-tweet:hover {
+    background: #0b70ad;
+    border-color: #0b70ad;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(11, 112, 173, 0.3);
+}
+
+[data-theme="light"] .btn-card-action:hover {
+    color: #0f172a;
+    background: rgba(0, 0, 0, 0.05);
+    border-color: #cbd5e1;
+}
+
 .logo-container {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-color);
