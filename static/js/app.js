@@ -46,6 +46,28 @@ const toastMessage = document.getElementById('toast-message');
    INITIALIZATION & EVENT LISTENERS
    ========================================================================== */
 document.addEventListener('DOMContentLoaded', () => {
+    // Theme setup
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    if (savedTheme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+    }
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'dark');
+                showToast("Dark theme activated");
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                showToast("Light theme activated");
+            }
+        });
+    }
+
     // Initial fetch
     fetchReleases();
 

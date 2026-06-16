@@ -38,7 +38,41 @@
 
     --tweet-color: #1d9bf0;
     --tweet-hover: #1a8cd8;
+}
+
+[data-theme="light"] {
+    --bg-dark: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-header: #f1f5f9;
+    --border-color: #cbd5e1;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
     
+    --primary: #4f46e5;
+    --primary-hover: #4338ca;
+    --primary-glow: rgba(79, 70, 229, 0.15);
+    
+    --badge-feature-bg: rgba(16, 185, 129, 0.08);
+    --badge-feature-border: rgba(16, 185, 129, 0.25);
+    --badge-feature-text: #047857;
+    --badge-feature-glow: rgba(16, 185, 129, 0.15);
+
+    --badge-change-bg: rgba(59, 130, 246, 0.08);
+    --badge-change-border: rgba(59, 130, 246, 0.25);
+    --badge-change-text: #1d4ed8;
+    --badge-change-glow: rgba(59, 130, 246, 0.15);
+
+    --badge-deprecation-bg: rgba(239, 68, 68, 0.08);
+    --badge-deprecation-border: rgba(239, 68, 68, 0.25);
+    --badge-deprecation-text: #b91c1c;
+    --badge-deprecation-glow: rgba(239, 68, 68, 0.15);
+
+    --badge-note-bg: rgba(139, 92, 246, 0.08);
+    --badge-note-border: rgba(139, 92, 246, 0.25);
+    --badge-note-text: #6d28d9;
+    --badge-note-glow: rgba(139, 92, 246, 0.15);
+}    
     /* Layout */
     --sidebar-width: 380px;
     --radius-sm: 8px;
@@ -116,6 +150,74 @@ body {
     align-items: center;
     gap: 16px;
     margin-bottom: 48px;
+    position: relative;
+}
+
+/* Theme Toggle Button */
+.btn-theme-toggle {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    border-color: var(--text-muted);
+}
+
+[data-theme="light"] .btn-theme-toggle {
+    background: rgba(0, 0, 0, 0.03);
+    color: var(--text-secondary);
+}
+
+[data-theme="light"] .btn-theme-toggle:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: var(--text-primary);
+}
+
+.btn-theme-toggle .sun-icon {
+    display: block;
+}
+
+.btn-theme-toggle .moon-icon {
+    display: none;
+}
+
+[data-theme="light"] .btn-theme-toggle .sun-icon {
+    display: none;
+}
+
+[data-theme="light"] .btn-theme-toggle .moon-icon {
+    display: block;
+}
+
+[data-theme="light"] .brand-text h1 {
+    background: linear-gradient(135deg, #0f172a 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .card-content code {
+    background: rgba(0, 0, 0, 0.05);
+    color: #0f172a;
+}
+
+[data-theme="light"] #search-input {
+    color: #0f172a;
+}
+
+[data-theme="light"] #tweet-textarea {
+    color: #0f172a;
+    background: rgba(0, 0, 0, 0.02);
 }
 
 .logo-container {
